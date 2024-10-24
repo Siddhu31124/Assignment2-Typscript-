@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+*{
+  box-sizing: border-box;
+  margin:0px;
+  padding:0px;
+  font-family:inter;
+  font-weight: 600;
+}
+.active_indicator_dashboard{
+  position:absolute;
+  background-color:blue;
+  width:8px;
+  height:30px;
+  color:blue;
+  left:0px;
+  top:100px;
+  border-top-right-radius:16px;
+  border-bottom-right-radius:16px;
+  transition:all 0.3s 0s ease;
+}
+.active_indicator_transaction{
+  position:absolute;
+  background-color:blue;
+  width:8px;
+  height:30px;
+  color:blue;
+  left:0px;
+  top:138px;
+  border-top-right-radius:16px;
+  border-bottom-right-radius:16px;
+  transition:all 0.3s 0s ease;
+
+}
+td,th{
+  width:140px;
+  text-align: center;
+}
+::-webkit-scrollbar {
+  display: none; 
+}
+.form-input {
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  border-color: #6c63ff;
+}
+.login-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #6c63ff;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #554ebf;
+}
+.modal {
+border-radius: 20px;
+border: none;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+padding: 1rem;
+width: 80%;
+max-width: 500px;
+animation: fade-slide-up 0.3s ease-out forwards;
+margin:auto;
+}
+input,select{
+  border:1px solid rgba(132, 132, 132, 0.934);
+  padding:6px;
+  border-radius:8px;
+  color:black;
+}
+.modal::backdrop {
+  height:100vh;
+  background-color: rgba(83, 102, 116, 0.673);
+  backdrop-filter:blur(2px);
+}
+@keyframes fade-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(4rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
