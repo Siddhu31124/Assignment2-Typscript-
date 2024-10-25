@@ -12,7 +12,6 @@ import Loader from "./CommonComponents/Loader";
 import Dropdown from "./CommonComponents/Dropdown";
 import { loaderStyle } from "../utils/Styles";
 import mainStore from "../Store/ModalStore";
-import { AddTransactionData } from "../Types/CommonTypes";
 import TransactionStore from "../Store/TranactionStore";
 import { TransactionData } from "../Types/CommonTypes";
 import {
@@ -21,6 +20,7 @@ import {
   DATA_FORMAT,
 } from "../Constants";
 import { formateObjData } from "../utils/formatData";
+import EditTransactionModal from "../Modal/TransactionModal";
 
 const EditModal = observer(() => {
   const isOpen = mainStore.modalStates.isEdit;
@@ -55,7 +55,7 @@ const EditModal = observer(() => {
 
   useEffect(() => {
     if (data) {
-      TransactionStore.editTransaction(formateObjData(data.update_transactions_by_pk));
+      EditTransactionModal.editTransaction(formateObjData(data.update_transactions_by_pk));
     }
   }, [data]);
 
