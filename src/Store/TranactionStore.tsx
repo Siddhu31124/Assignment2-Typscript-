@@ -5,16 +5,20 @@ import { CREDIT_INDEX,DEBIT_INDEX } from "../Constants";
 //Rename with underscore
 class _TransactionStore {
   //Remove the below unused state
+  //use private access modifiers here
   transactionData: TransactionData[] = [];
+  //Use the type interface here
   totalTransaction:{type:string,sum:number}[]=[]
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
   }
+
   setTotalTransaction(data:{type:string,sum:number}[]){
     this.totalTransaction=data
   }
 
+  //NO need to add get prefix here
   get getTransactionsData() {
     return this.transactionData;
   }
@@ -27,6 +31,7 @@ class _TransactionStore {
   addTransaction(addTransactionDetails: TransactionData) {
     this.transactionData.push(addTransactionDetails);
 
+    //no magic numbers
     if(addTransactionDetails.type==='credit'){
       this.totalTransaction[CREDIT_INDEX].sum+=addTransactionDetails.amount
     }
@@ -43,6 +48,7 @@ class _TransactionStore {
       (eachTransaction) => eachTransaction.id !== deleteId
     );
 
+    //Use find method here
     if(deleteDetails[0].type==='credit'){
       this.totalTransaction[CREDIT_INDEX].sum-=deleteDetails[0].amount
     }
