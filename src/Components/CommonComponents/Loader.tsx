@@ -1,4 +1,5 @@
 import { TailSpin } from "react-loader-spinner";
+
 export default function Loader({ height = 80, width = 80 }) {
   return (
     <TailSpin

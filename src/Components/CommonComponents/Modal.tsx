@@ -1,7 +1,9 @@
 import { createPortal } from "react-dom";
 import { useRef, useEffect } from "react";
-import mainStore from "../../Store/MainStore";
 import { observer } from "mobx-react";
+
+import mainStore from "../../Store/MainStore";
+
 const Modal=observer(({ children, isOpen, style }:{children:JSX.Element,isOpen:boolean,style:string}) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   useEffect(() => {

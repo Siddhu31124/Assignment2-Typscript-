@@ -5,11 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import { FaCircleUser } from "react-icons/fa6";
 import { IoIosLogOut } from "react-icons/io";
+import { observer } from "mobx-react";
 
 import { INITIAL_ROUTE, TRANSACTION_ROUTE, LOCAL_ADMIN } from "../Constants";
 import { fetchUserProfile } from "../http";
 import mainStore from "../Store/MainStore";
-import { observer } from "mobx-react";
 
 const Sidebar= observer(()=> {
   const location = useLocation();

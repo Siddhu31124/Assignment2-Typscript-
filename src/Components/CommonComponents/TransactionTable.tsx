@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { CiCircleChevUp, CiCircleChevDown } from "react-icons/ci";
 import { FaPencilAlt } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+
 import { DATA_FORMAT, TYPE_OF_TRANSACTION_CREDIT } from "../../Constants";
 import TableHead from "./TableHead";
 import { TransactionTableType } from "../../Types/TableTypes";
@@ -15,7 +16,6 @@ const TransactionTable = observer(({ data, head, tableClass }: TransactionTableT
       return <TableHead />;
     }
   };
-
   return (
     <table className={tableClass}>
       {tableHeadPresent()}

@@ -1,13 +1,14 @@
-export type ContextDataType = 
+export type ActionTypeData = 
 {id: number, transaction_name: string,type: string, category: string, amount: number,date:string} 
   | number |undefined 
 
-  export interface ContextStateType{
+export interface ContextStateType{
     isDelete: boolean,
     isAdd: boolean,
     isEdit: boolean,
     isLogout: boolean,
-  }
+}
+
 export interface ContextType {
     ModalStates:ContextStateType,
     selectedData : ContextDataType,

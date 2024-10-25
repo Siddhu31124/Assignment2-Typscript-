@@ -1,32 +1,31 @@
-import { useQuery } from "@tanstack/react-query";
+import { observer } from "mobx-react";
+import { useEffect } from "react";
 
-import { fetchAllTransaction } from "../http";
 import TransactionTable from "./CommonComponents/TransactionTable";
-import Loader from "./CommonComponents/Loader";
 import ModalLayout from "./CommonComponents/ModalLayout";
-import { FAIL_ERROR, QUERY_KEY } from "../Constants";
 import MobileDetailsContainer from "./MobileDetailsContainer";
+import TransactionStore from "../Store/TranactionStore";
+import Loader from "./CommonComponents/Loader";
+import useFetchInitialData from "../useFetchIntialData";
 import {
   allTransactionMobileStyle,
   allTransactionTableStyle,
-  transactionTableMain,
   loaderStyle,
+  transactionTableMain,
 } from "../utils/Styles";
-import { TransactionDataType } from "../Types/CommonTypes";
 
-export default function Debit() {
-  const { data, isPending, isError }:
-  {data:{transactions:TransactionDataType[]} | undefined,
-  isPending:boolean,
-  isError:boolean} = useQuery({
-    queryKey: [QUERY_KEY, "debitData"],
-    queryFn: fetchAllTransaction,
-  });
-
+const Debit=observer(()=> {
+  const{data,isPending}=useFetchInitialData()
+  useEffect(()=>{
+    if(data){
+      TransactionStore.setTransactionData(data.transactions)
+    }
+  },[data])
+  
   const debitData = () => {
     switch (true) {
-      case data !== undefined: {
-        let debitTransactionList = data.transactions.filter(
+      case data!==undefined: {
+        let debitTransactionList = TransactionStore.getTransactionsData.filter(
           (each) => each.type === "debit"
         );
         return (
@@ -45,19 +44,10 @@ export default function Debit() {
           </>
         );
       }
-      case isPending: {
-        return (
-          <div className={loaderStyle}>
-            <Loader />
-          </div>
-        );
-      }
-      case isError: {
-        return (
-          <div className="align-middle pt-96">
-            <h1 className="text-3xl font-bold text-red-600">{FAIL_ERROR}</h1>
-          </div>
-        );
+      case isPending :{
+        return <div className={loaderStyle}>
+            <Loader/>
+        </div>
       }
     }
   };
@@ -68,4 +58,6 @@ export default function Debit() {
       {debitData()}
     </div>
   );
-}
+})
+
+export default Debit

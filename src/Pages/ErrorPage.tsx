@@ -1,4 +1,5 @@
 import { ERROR_PAGE_MSG } from "../Constants";
+
 export default function ErrorPage() {
   return (
     <div className="flex flex-col gap-8 content-center items-center">

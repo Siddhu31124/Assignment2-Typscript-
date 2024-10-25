@@ -9,7 +9,6 @@ import MobileTransaction from "./MobileTransactionBar";
 import { addButtonTransactionStyle, navBarStyle } from "../utils/Styles";
 import mainStore from "../Store/MainStore";
 
-// Wrap component with observer
 const TransactionHeader = observer(() => {
 
   const isActivePathStyle = ({ isActive }: { isActive: boolean }) => (isActive ? "text-blue-500" : "");

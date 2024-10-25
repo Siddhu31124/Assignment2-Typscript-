@@ -1,31 +1,34 @@
 import { useMutation } from "@tanstack/react-query";
 import { MdCancel } from "react-icons/md";
 import toast from "react-hot-toast";
+import { useEffect } from "react";
+import { observer } from "mobx-react";
 
-import { queryClient, handelAddTransaction } from "../http";
+import { handelAddTransaction } from "../http";
 import Loader from "./CommonComponents/Loader";
 import Modal from "./CommonComponents/Modal";
 import Input from "./CommonComponents/Input";
-import { QUERY_KEY } from "../Constants";
 import Dropdown from "./CommonComponents/Dropdown";
 import { TRANSACTION_CATEGORY, TRANSACTION_TYPE } from "../Constants";
 import { loaderStyle } from "../utils/Styles";
 import { AddTransactionDataType } from "../Types/CommonTypes";
 import mainStore from "../Store/MainStore";
-import { observer } from "mobx-react";
+import TransactionStore from "../Store/TranactionStore";
 
 const AddModal = observer(() => {
   let mutateFun = handelAddTransaction;
-  const { mutate, isPending } = useMutation({
+  const { data,mutate, isPending } = useMutation({
     mutationFn: mutateFun,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY],
-      });
       closeModalFunction(typeOfModal);
       toast.success("Added Successfully");
     },
   });
+  useEffect(()=>{
+    if(data){
+      TransactionStore.addTransaction(data.insert_transactions_one)
+    }
+  },[data])
 
   const isOpen = mainStore.modalStates.isAdd;
   const closeModalFunction = mainStore.handelCloseModal;
@@ -35,7 +38,7 @@ const AddModal = observer(() => {
     event.preventDefault();
     let data = new FormData(event.target as HTMLFormElement);
     let formData: AddTransactionDataType = {
-      transaction_name: data.get("name") as string,
+      name: data.get("name") as string,
       type: data.get("type") as string,
       category: data.get("category") as string,
       amount: Number(data.get("amount")),

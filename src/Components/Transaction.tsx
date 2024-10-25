@@ -1,11 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { observer } from "mobx-react";
 
-import { fetchAllTransaction } from "../http";
+
 import Loader from "./CommonComponents/Loader";
 import ModalLayout from "./CommonComponents/ModalLayout";
 import TransactionTable from "./CommonComponents/TransactionTable";
-import { QUERY_KEY, FAIL_ERROR } from "../Constants";
 import MobileDetailsContainer from "./MobileDetailsContainer";
+import TransactionStore from "../Store/TranactionStore";
+import useFetchInitialData from "../useFetchIntialData";
 import mainStore from "../Store/MainStore";
 import {
   allTransactionMobileStyle,
@@ -13,24 +15,24 @@ import {
   loaderStyle,
   transactionTableMain,
 } from "../utils/Styles";
-import { TransactionDataType } from "../Types/CommonTypes";
-import { observer } from "mobx-react";
+
 
 const  Transaction = observer(()=> {
-  const { data, isPending, isError }:
-  {data:{transactions:TransactionDataType[]} | undefined,
-  isPending:boolean,
-  isError:boolean} = useQuery({
-    queryKey: [QUERY_KEY, "all"],
-    queryFn: fetchAllTransaction,
-  });
+  const{data,isPending}=useFetchInitialData()
+
+  useEffect(()=>{
+    if(data){
+      TransactionStore.setTransactionData(data.transactions)
+    }
+  },[data])
+  
   const allTransactionData = () => {
     switch (true) {
       case data !== undefined: {
         return (
           <>
             <main className={allTransactionTableStyle}>
-              <TransactionTable data={data} head />
+              <TransactionTable data={{transactions:TransactionStore.getTransactionsData}} head />
             </main>
             <main
               className={allTransactionMobileStyle}
@@ -45,13 +47,6 @@ const  Transaction = observer(()=> {
         return (
           <div className={loaderStyle}>
             <Loader />
-          </div>
-        );
-      }
-      case isError: {
-        return (
-          <div className="align-middle pt-96">
-            <h1 className="text-3xl font-bold text-red-600">{FAIL_ERROR}</h1>
           </div>
         );
       }

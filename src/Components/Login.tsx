@@ -3,10 +3,12 @@ import { useMutation } from "@tanstack/react-query";
 import { Navigate } from "react-router";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
+import { observer } from "mobx-react";
 
 import { handelLogin } from "../http";
 import Input from "./CommonComponents/Input";
 import Loader from "./CommonComponents/Loader";
+import TransactionStore from "../Store/TranactionStore";
 import {
   INITIAL_ROUTE,
   LOCAL_TOKEN,
@@ -16,12 +18,13 @@ import {
 } from "../Constants";
 import { loginFormStyle, loginInputStyle } from "../utils/Styles";
 
-export default function Login() {
+const Login = observer(() => {
   const location = useLocation();
   const navigate = useNavigate();
   const { mutate, isPending, isError } = useMutation({
     mutationFn: handelLogin,
     onSuccess: () => {
+      console.log(TransactionStore.transactionData)
       navigate(INITIAL_ROUTE);
     },
   });
@@ -113,4 +116,6 @@ export default function Login() {
       {loginForm()}
     </div>
   );
-}
+})
+
+export default Login

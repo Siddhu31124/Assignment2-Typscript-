@@ -1,45 +1,45 @@
-import { useQuery } from "@tanstack/react-query";
 import { MdOutlineLightMode } from "react-icons/md";
-import { fetchLastTransaction } from "../http";
+import { useEffect } from "react";
+import { observer } from "mobx-react";
+
+
 import Loader from "./CommonComponents/Loader";
 import TotalCreditDebitContainer from "./TotalCreditDebitContainer";
 import ModalLayout from "./CommonComponents/ModalLayout";
-import { FAIL_ERROR, QUERY_KEY } from "../Constants";
 import TransactionTable from "./CommonComponents/TransactionTable";
 import MobileNavBar from './MobileMenuElement';
 import MobileDetailsContainer from "./MobileDetailsContainer";
 import { allTransactionDashTableStyle, navBarStyle } from "../utils/Styles";
 import mainStore from "../Store/MainStore";
-import { observer } from "mobx-react";
+import TransactionStore from "../Store/TranactionStore";
+import {loaderStyle } from "../utils/Styles";
+import useFetchInitialData from "../useFetchIntialData";
 
-const DashBoard = observer(() => {
-  const { data, isPending, isError } = useQuery({
-    queryKey: [QUERY_KEY, "lastThree"],
-    queryFn: fetchLastTransaction,
-  });
-
+const DashBoard = observer(() => { 
+  const {data,isPending}=useFetchInitialData()
+  useEffect(()=>{
+    if(data){
+      TransactionStore.setTransactionData(data.transactions)
+    }
+  },[data])
+  
   const lastTransaction = () => {
     switch (true) {
       case data !== undefined: {
         return (
           <>
             <TransactionTable
-              data={data}
+              data={{transactions:TransactionStore.getTransactionsData.slice(0,3)}}
               tableClass={allTransactionDashTableStyle}
             />
-            <MobileDetailsContainer data={data} />
+            <MobileDetailsContainer data={{transactions:TransactionStore.getTransactionsData.slice(0,3)}}/>
           </>
         );
       }
-      case isPending: {
-        return (
-          <div className="ml-96 pl-12 pt-28">
-            <Loader />
-          </div>
-        );
-      }
-      case isError: {
-        return <p className="text-red-500 text-xl ">{FAIL_ERROR}</p>;
+      case isPending :{
+        return <div className={loaderStyle}>
+            <Loader/>
+        </div>
       }
     }
   };

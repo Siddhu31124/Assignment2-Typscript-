@@ -1,14 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
+import { observer } from "mobx-react";
 
 import { fetchTotalTransaction } from "../http";
 import { QUERY_KEY, FAIL_ERROR } from "../Constants";
 import totalCreditAndDebit from "../utils/TotalCreditAndDebit";
 import { totalTransactionBlocks } from "../utils/Styles"
-import { CommonTotalCreditAndDebit } from "../Types/CommonTypes";
+import { TotalCreditAndDebit } from "../Types/CommonTypes";
+import TransactionStore from "../Store/TranactionStore";
 
-export default function TotalCreditDebitContainer() {
+const TotalCreditDebitContainer=observer(()=> {
   const { data, isPending, isError }:
-  {data:{totals_credit_debit_transactions:CommonTotalCreditAndDebit} | undefined,
+  {data:{totals_credit_debit_transactions:TotalCreditAndDebit} | undefined,
   isPending:boolean,
   isError:boolean}= useQuery({
     queryKey: [QUERY_KEY],
@@ -32,10 +34,8 @@ export default function TotalCreditDebitContainer() {
   const totalDataFunction = () => {
     if (data) {
       let totalData = totalCreditAndDebit(
-        data.totals_credit_debit_transactions
-        
+        TransactionStore.topTransaction
       );
-      console.log(data.totals_credit_debit_transactions)
       return (
         <div className=" flex flex-col gap-2 lg:flex-row lg:justify-between mb-5 ">
           <div className={`text-green-400 ${totalTransactionBlocks}`}>
@@ -62,4 +62,5 @@ export default function TotalCreditDebitContainer() {
   };
 
   return <>{totalDataFunction()}</>;
-}
+})
+export default TotalCreditDebitContainer

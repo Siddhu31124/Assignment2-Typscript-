@@ -13,12 +13,12 @@ import
   UPDATE_TRANSACTION_API,
   LOGIN_API,LOCAL_ADMIN,PROFILE_API,
 } from "./Constants.js";
-import { TransactionDataType,LoginTypes,AddTransactionDataType } from "./Types/CommonTypes.js";
+import {LoginTypes,AddTransactionDataType } from "./Types/CommonTypes.js";
 
 export const queryClient = new QueryClient();
 export const queryCache=new QueryCache()
 
-export async function fetchAllTransaction(){
+export const fetchAllTransaction=  async ()=> {
   const localToken = localStorage.getItem(LOCAL_TOKEN);
   const token_id: number = localToken ? JSON.parse(localToken) : undefined; 
 
@@ -32,10 +32,9 @@ export async function fetchAllTransaction(){
       "x-hasura-user-id": token_id, 
     },
   });
+    return res.data;
 
-return res.data;
-
-        }
+}
 
 export async function fetchLastTransaction(){
   const localToken = localStorage.getItem(LOCAL_TOKEN);
@@ -51,7 +50,7 @@ export async function fetchLastTransaction(){
           "x-hasura-admin-secret": SECRETE_KEY,
           "x-hasura-role": ROLE,
           "x-hasura-user-id": token_id},
-     });
+     });
     return res.data 
 }
 
@@ -65,7 +64,7 @@ export async function fetchTotalTransaction(){
           "x-hasura-admin-secret": SECRETE_KEY,
           "x-hasura-role": ROLE,
           "x-hasura-user-id": token_id},
-     });
+     });
     return res.data 
 }
 
@@ -74,20 +73,21 @@ export const handleTransactionDelete = async ({id}:{id:string}) => {
   const token_id: number = localToken ? JSON.parse(localToken) : undefined; 
 
       const url = DELETE_TRANSACTION_API+id;
-         await axios.delete(url, {
+        const res = await axios.delete(url, {
           headers: {"Content-Type": CONTENT_TYPE,
             "x-hasura-admin-secret": SECRETE_KEY,
             "x-hasura-role": ROLE,
             "x-hasura-user-id": token_id
           },
-     });  
-  };
+  });
+  return res.data
+};
 
 export async function handelAddTransaction({data}:{data:AddTransactionDataType}){
   const localToken = localStorage.getItem(LOCAL_TOKEN);
   const token_id: number = localToken ? JSON.parse(localToken) : undefined; 
   const url =ADD_TRANSACTION_API
-   await axios.post(
+   const res=await axios.post(
     url,
     {...data,user_id:token_id},
     {
@@ -98,13 +98,14 @@ export async function handelAddTransaction({data}:{data:AddTransactionDataType})
 
     }
   );
+  return res.data
 }
 
 export async function handelEditTransaction({data,id}:{data:AddTransactionDataType,id:number}){
   const localToken = localStorage.getItem(LOCAL_TOKEN);
   const token_id: number = localToken ? JSON.parse(localToken) : undefined; 
   const url = UPDATE_TRANSACTION_API;
-  await axios.post(
+  const res=await axios.post(
     url,
     {...data,id:id},
     { headers: {"Content-Type": CONTENT_TYPE,
@@ -112,6 +113,7 @@ export async function handelEditTransaction({data,id}:{data:AddTransactionDataTy
     "x-hasura-role": ROLE,
       "x-hasura-user-id": token_id} }
   ); 
+  return (res.data)  
 }
 
 export async function handelLogin({data,admin}:{data:LoginTypes,admin:boolean}){
@@ -133,8 +135,8 @@ export async function handelLogin({data,admin}:{data:LoginTypes,admin:boolean}){
     }
     return "Successful"
   }
-
 }
+
 export const fetchUserProfile = async () => {
   const localToken = localStorage.getItem(LOCAL_TOKEN);
   const token_id: number = localToken ? JSON.parse(localToken) : undefined; 

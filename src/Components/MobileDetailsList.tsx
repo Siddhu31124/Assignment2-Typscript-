@@ -1,22 +1,23 @@
 import dayjs from "dayjs";
 import { useState } from "react";
-import { DATA_FORMAT } from "../Constants";
-import { TYPE_OF_TRANSACTION_CREDIT } from "../Constants";
+import { observer } from "mobx-react";
 import { FaPencilAlt } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { mobileListsStyle } from "../utils/Styles";
-import { TransactionDataType } from "../Types/CommonTypes";
-import mainStore from "../Store/MainStore";
-import { observer } from "mobx-react";
 
-const MobileDetailsList=observer(({ eachItems }:{eachItems:TransactionDataType})=>{
+import { DATA_FORMAT,TYPE_OF_TRANSACTION_CREDIT  } from "../Constants";
+import { mobileListsStyle } from "../utils/Styles";
+import mainStore from "../Store/MainStore";
+import { ActionTypeData } from "../Types/ContextTypes";
+
+const MobileDetailsList=observer(({ eachItems }:{eachItems:ActionTypeData})=>{
+  
   const [isOpenAction, setIsOpenAction] = useState<boolean>(false);
 
   function handelAction() {
     setIsOpenAction((preVal) => !preVal);
   }
 
-  const actionContainer = (eachItems:TransactionDataType) => {
+  const actionContainer = (eachItems:ActionTypeData) => {
     return (
       <div className="bg-white px-2  rounded-2xl self-start dark:bg-black">
         <button

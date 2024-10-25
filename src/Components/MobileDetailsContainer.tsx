@@ -1,7 +1,8 @@
 import MobileDetailsList from "./MobileDetailsList";
-import { TransactionDataType } from "../Types/CommonTypes";
+import { ActionTypeData } from "../Types/ContextTypes";
 
-export default function MobileDetailsContainer({ data }:{data:{transactions:TransactionDataType[]}}) {
+export default function MobileDetailsContainer({ data }:{data:{transactions:ActionTypeData[]}})
+ {
   return (
     <ul className="lg:hidden flex flex-col items-center gap-4">
       <>

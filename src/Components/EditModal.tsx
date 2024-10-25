@@ -3,28 +3,30 @@ import toast from "react-hot-toast";
 import { MdCancel } from "react-icons/md";
 import { useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
+import { observer } from "mobx-react";
 
 import Modal from "./CommonComponents/Modal";
 import Input from "./CommonComponents/Input";
-import { handelEditTransaction, queryClient } from "../http";
+import { handelEditTransaction } from "../http";
 import Loader from "./CommonComponents/Loader";
-import { QUERY_KEY } from "../Constants";
 import Dropdown from "./CommonComponents/Dropdown";
+import { loaderStyle } from "../utils/Styles";
+import mainStore from "../Store/MainStore";
+import {AddTransactionDataType } from "../Types/CommonTypes";
+import TransactionStore from "../Store/TranactionStore";
 import {
   TRANSACTION_CATEGORY,
   TRANSACTION_TYPE,
   DATA_FORMAT,
 } from "../Constants";
-import { loaderStyle } from "../utils/Styles";
-import mainStore from "../Store/MainStore";
-import { observer } from "mobx-react";
-import {AddTransactionDataType } from "../Types/CommonTypes";
+
 
 const  EditModal=observer(()=> {
   const isOpen = mainStore.modalStates.isEdit;
   const closeModalFunction = mainStore.handelCloseModal;
   const editTransactionData = mainStore.selectedData;
   const typeOfModal = "isEdit";
+
 
   interface InputStateType {
     id: number;
@@ -41,16 +43,19 @@ const  EditModal=observer(()=> {
   }, [editTransactionData]);
 
   const mutateFun = handelEditTransaction;
-  const { mutate, isPending } = useMutation({
+  const { data,mutate, isPending } = useMutation({
     mutationFn: mutateFun,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY],
-      });
       closeModalFunction(typeOfModal);
       toast.success(`Updated Successfully`);
     },
   });
+  
+  useEffect(()=>{
+    if(data){
+      TransactionStore.editTransaction(data.update_transactions_by_pk)
+    }
+  },[data])
 
   function handelChange(event:React.ChangeEvent<HTMLInputElement> , typeInput:string) {
     setInputValues((prevVal) => {
@@ -62,7 +67,7 @@ const  EditModal=observer(()=> {
     event.preventDefault();
     let data = new FormData(event.target as HTMLFormElement);
     let formData: AddTransactionDataType  = {
-      transaction_name: data.get("name") as string,
+      name: data.get("name") as string,
       type: data.get("type") as string,
       category: data.get("category") as string,
       amount: Number(data.get("amount")),
@@ -126,7 +131,7 @@ const  EditModal=observer(()=> {
           itemsName={TRANSACTION_TYPE}
           types
           value={inputValues ? inputValues.type : ""}
-          onChange={(event :React.ChangeEvent<HTMLInputElement>) => handelChange(event, "type")}
+          onChange={(event :React.ChangeEvent<HTMLSelectElement>) => handelChange(event, "type")}
         />
 
         <Dropdown
@@ -134,7 +139,7 @@ const  EditModal=observer(()=> {
           itemsName={TRANSACTION_CATEGORY}
           types
           value={inputValues ? inputValues.category : ""}
-          onChange={(event :React.ChangeEvent<HTMLInputElement>) => handelChange(event, "category")}
+          onChange={(event :React.ChangeEvent<HTMLSelectElement>) => handelChange(event, "category")}
         />
 
         <Input

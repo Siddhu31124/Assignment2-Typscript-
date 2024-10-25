@@ -2,26 +2,30 @@ import { MdCancel } from "react-icons/md";
 import { useMutation } from "@tanstack/react-query";
 import { CiWarning } from "react-icons/ci";
 import toast from "react-hot-toast";
-
-import { queryClient, handleTransactionDelete } from "../http";
-import Loader from "./CommonComponents/Loader";
-import { QUERY_KEY } from "../Constants";
-import Modal from "./CommonComponents/Modal";
-import mainStore from "../Store/MainStore";
+import { useEffect } from "react";
 import { observer } from "mobx-react";
 
+import { handleTransactionDelete } from "../http";
+import Loader from "./CommonComponents/Loader";
+import Modal from "./CommonComponents/Modal";
+import mainStore from "../Store/MainStore";
+import TransactionStore from "../Store/TranactionStore";
+
 const DeleteModal = observer(() => {
-  const { mutate, isPending } = useMutation({
+  const { data,mutate, isPending } = useMutation({
     mutationKey: ["deleteFn"],
     mutationFn: handleTransactionDelete,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY],
-      });
       closeModalFunction(typeOfModal);
       toast.success("Deleted Successfully");
     },
   });
+  useEffect(()=>{
+    if(data){
+    TransactionStore.deleteTransaction(data.delete_transactions_by_pk)
+  }
+  },[data])
+  
 
   const isOpen = mainStore.modalStates.isDelete;
   const closeModalFunction = mainStore.handelCloseModal;

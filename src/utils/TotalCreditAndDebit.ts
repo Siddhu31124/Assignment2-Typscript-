@@ -1,5 +1,6 @@
-import { CommonTotalCreditAndDebit } from "../Types/CommonTypes"
-const totalCreditAndDebit = (totals_credit_debit_transactions : CommonTotalCreditAndDebit)=>{
+import { TotalCreditAndDebit } from "../Types/CommonTypes"
+
+const totalCreditAndDebit = (totals_credit_debit_transactions : TotalCreditAndDebit)=>{
     let debitData=totals_credit_debit_transactions[0].sum
     if(totals_credit_debit_transactions.length>1){
         let creditData=totals_credit_debit_transactions[1].sum 
