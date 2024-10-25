@@ -8,7 +8,6 @@ import { DATA_FORMAT, TYPE_OF_TRANSACTION_CREDIT } from "../../Constants";
 import TableHead from "./TableHead";
 import { TransactionTableType } from "../../Types/TableTypes";
 import mainStore from "../../Store/ModalStore";
-import formatData from "../../utils/formatData";
 // No magic strings
 const TransactionTable = observer(({ data, head, tableClass }: TransactionTableType) => {
   const tableHeadPresent = () => {
