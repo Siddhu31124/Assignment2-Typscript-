@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import Login from "../Components/Login";
-import mainStore from "../Store/MainStore";
+import mainStore from "../Store/ModalStore";
 
 const LoginPage= observer( ()=> {
   return (

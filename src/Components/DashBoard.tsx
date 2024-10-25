@@ -10,16 +10,17 @@ import TransactionTable from "./CommonComponents/TransactionTable";
 import MobileNavBar from './MobileMenuElement';
 import MobileDetailsContainer from "./MobileDetailsContainer";
 import { allTransactionDashTableStyle, navBarStyle } from "../utils/Styles";
-import mainStore from "../Store/MainStore";
+import mainStore from "../Store/ModalStore";
 import TransactionStore from "../Store/TranactionStore";
 import {loaderStyle } from "../utils/Styles";
 import useFetchInitialData from "../useFetchIntialData";
+import formatData from "../utils/formatData";
 
 const DashBoard = observer(() => { 
   const {data,isPending}=useFetchInitialData()
   useEffect(()=>{
     if(data){
-      TransactionStore.setTransactionData(data.transactions)
+      TransactionStore.transactionData = formatData(data.transactions)
     }
   },[data])
   

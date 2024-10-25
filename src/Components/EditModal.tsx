@@ -11,7 +11,7 @@ import { handelEditTransaction } from "../http";
 import Loader from "./CommonComponents/Loader";
 import Dropdown from "./CommonComponents/Dropdown";
 import { loaderStyle } from "../utils/Styles";
-import mainStore from "../Store/MainStore";
+import mainStore from "../Store/ModalStore";
 import { AddTransactionData } from "../Types/CommonTypes";
 import TransactionStore from "../Store/TranactionStore";
 import { TransactionData } from "../Types/CommonTypes";
@@ -29,7 +29,7 @@ const EditModal = observer(() => {
 
   interface InputStateType {
     id: number;
-    transaction_name: string;
+    name: string;
     type: string;
     category: string;
     amount: number;
@@ -54,7 +54,7 @@ const EditModal = observer(() => {
 
   useEffect(() => {
     if (data) {
-      TransactionStore.editTransaction(data.update_transactions_by_pk);
+      TransactionStore.editTransaction(data.update_transactions_by_pk,);
     }
   }, [data]);
 
@@ -124,21 +124,20 @@ const EditModal = observer(() => {
         <p>Fill The Edit Details</p>
 
         <Input
-          label_name="Transaction Name"
+          labelName="Transaction Name"
           type="text"
           id="transactionName"
           name="name"
           placeholder="Transaction Name"
-          value={inputValues ? inputValues.transaction_name : ""}
+          value={inputValues ? inputValues.name: ""}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            handelChange(event, "transaction_name")
+            handelChange(event, "name")
           }
         />
 
         <Dropdown
-          inputId="type"
-          itemsName={TRANSACTION_TYPE}
-          type="type"
+          optionName={TRANSACTION_TYPE}
+          name='type'
           value={inputValues ? inputValues.type : ""}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
             handelChange(event, "type")
@@ -146,9 +145,8 @@ const EditModal = observer(() => {
         />
 
         <Dropdown
-          inputId="category"
-          itemsName={TRANSACTION_CATEGORY}
-          type="category"
+          optionName={TRANSACTION_CATEGORY}
+          name="category"
           value={inputValues ? inputValues.category : ""}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
             handelChange(event, "category")
@@ -156,7 +154,7 @@ const EditModal = observer(() => {
         />
 
         <Input
-          label_name="Amount"
+          labelName="Amount"
           type="number"
           id="amount"
           name="amount"
@@ -168,7 +166,7 @@ const EditModal = observer(() => {
         />
 
         <Input
-          label_name="Date"
+          labelName="Date"
           type="date"
           id="date"
           name="date"

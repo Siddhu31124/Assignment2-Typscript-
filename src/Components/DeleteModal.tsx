@@ -8,7 +8,7 @@ import { observer } from "mobx-react";
 import { handleTransactionDelete } from "../http";
 import Loader from "./CommonComponents/Loader";
 import Modal from "./CommonComponents/Modal";
-import mainStore from "../Store/MainStore";
+import mainStore from "../Store/ModalStore";
 import TransactionStore from "../Store/TranactionStore";
 
 const DeleteModal = observer(() => {

@@ -1,5 +1,5 @@
 export type ModalTypeData = 
-{id: number, transaction_name: string,type: string, category: string, amount: number,date:string} 
+{id: number, name: string,type: string, category: string, amount: number,date:string} 
   | number |undefined 
 
 export interface ModalStates{

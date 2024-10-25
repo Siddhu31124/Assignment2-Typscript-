@@ -35,6 +35,8 @@ export const PROFILE_API =
 
 export const LIMIT_OF_ALL_TRANSACTION = 100;
 export const OFFSET_OF_ALL_TRANSACTION = 0;
+export const CREDIT_INDEX=1
+export const DEBIT_INDEX=0
 
 export const DATA_FORMAT = "YYYY-MM-DD";
 export const TYPE_OF_TRANSACTION_CREDIT = "credit";

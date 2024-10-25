@@ -7,8 +7,8 @@ import { MdDelete } from "react-icons/md";
 import { DATA_FORMAT, TYPE_OF_TRANSACTION_CREDIT } from "../../Constants";
 import TableHead from "./TableHead";
 import { TransactionTableType } from "../../Types/TableTypes";
-import mainStore from "../../Store/MainStore";
-
+import mainStore from "../../Store/ModalStore";
+import formatData from "../../utils/formatData";
 // No magic strings
 const TransactionTable = observer(({ data, head, tableClass }: TransactionTableType) => {
   const tableHeadPresent = () => {
@@ -31,7 +31,7 @@ const TransactionTable = observer(({ data, head, tableClass }: TransactionTableT
               ) : (
                 <CiCircleChevDown className="text-2xl text-red-600" />
               )}
-              {eachItem.transaction_name}
+              {eachItem.name}
             </td>
             <td>{eachItem.category}</td>
             <td>{dayjs(eachItem.date).format(DATA_FORMAT)}</td>

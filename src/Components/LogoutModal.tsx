@@ -8,7 +8,7 @@ import Modal from "./CommonComponents/Modal";
 import TransactionStore from "../Store/TranactionStore";
 import { LOCAL_TOKEN, LOCAL_ADMIN, LOGIN_ROUTE } from "../Constants";
 import { queryCache } from "../http";
-import mainStore from "../Store/MainStore";
+import mainStore from "../Store/ModalStore";
 
 const LogoutModal= observer(()=> {
   const navigate = useNavigate();

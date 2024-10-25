@@ -5,7 +5,7 @@ import { observer } from "mobx-react";
 
 import { INITIAL_ROUTE, TRANSACTION_ROUTE } from "../Constants";
 import { mobileMenuStyle, mobileAddButton } from "../utils/Styles";
-import mainStore from "../Store/MainStore";
+import mainStore from "../Store/ModalStore";
 
 const MobileNavBar = observer( () => {
 

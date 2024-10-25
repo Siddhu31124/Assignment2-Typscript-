@@ -12,7 +12,7 @@ import Dropdown from "./CommonComponents/Dropdown";
 import { TRANSACTION_CATEGORY, TRANSACTION_TYPE } from "../Constants";
 import { loaderStyle } from "../utils/Styles";
 import { AddTransactionData } from "../Types/CommonTypes";
-import mainStore from "../Store/MainStore";
+import mainStore from "../Store/ModalStore";
 import TransactionStore from "../Store/TranactionStore";
 
 const AddModal = observer(() => {
@@ -83,27 +83,26 @@ const AddModal = observer(() => {
         </div>
         <p>Fill The Transaction Details</p>
         <Input
-          label_name="Enter Name"
+          labelName="Enter Name"
           type="text"
           id="transactionName"
           name="name"
           placeholder="Transaction Name"
         />
-        <Dropdown inputId="type" itemsName={TRANSACTION_TYPE} types="type" />
+        <Dropdown optionName={TRANSACTION_TYPE} name="type" />
         <Dropdown
-          inputId="category"
-          itemsName={TRANSACTION_CATEGORY}
-          type="category"
+          optionName={TRANSACTION_CATEGORY}
+          name="category"
         />
         <Input
-          label_name="Amount"
+          labelName="Amount"
           type="text"
           id="amount"
           name="amount"
           placeholder="Amount"
         />
         <Input
-          label_name="Date"
+          labelName="Date"
           type="date"
           id="date"
           name="date"

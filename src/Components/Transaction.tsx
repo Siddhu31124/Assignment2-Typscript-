@@ -8,7 +8,8 @@ import TransactionTable from "./CommonComponents/TransactionTable";
 import MobileDetailsContainer from "./MobileDetailsContainer";
 import TransactionStore from "../Store/TranactionStore";
 import useFetchInitialData from "../useFetchIntialData";
-import mainStore from "../Store/MainStore";
+import mainStore from "../Store/ModalStore";
+import formatData from "../utils/formatData";
 import {
   allTransactionMobileStyle,
   allTransactionTableStyle,
@@ -22,7 +23,7 @@ const  Transaction = observer(()=> {
 
   useEffect(()=>{
     if(data){
-      TransactionStore.setTransactionData(data.transactions)
+      TransactionStore.transactionData = formatData(data.transactions)
     }
   },[data])
   

@@ -7,7 +7,7 @@ import { TRANSACTION_ROUTE, CREDIT_ROUTE, DEBIT_ROUTE } from "../Constants";
 import MobileNavBar from "./MobileMenuElement";
 import MobileTransaction from "./MobileTransactionBar";
 import { addButtonTransactionStyle, navBarStyle } from "../utils/Styles";
-import mainStore from "../Store/MainStore";
+import mainStore from "../Store/ModalStore";
 
 const TransactionHeader = observer(() => {
 

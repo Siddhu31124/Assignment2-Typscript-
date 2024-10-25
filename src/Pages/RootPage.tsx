@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { Outlet, Navigate } from "react-router-dom";
 import { LOCAL_TOKEN, LOGIN_ROUTE } from "../Constants";
 import Sidebar from "../Components/Sidebar.tsx";
-import mainStore from "../Store/MainStore.tsx";
+import mainStore from "../Store/ModalStore.tsx";
 
 const RootPage=observer(()=> {
   const token = localStorage.getItem(LOCAL_TOKEN);

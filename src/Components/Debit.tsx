@@ -7,6 +7,7 @@ import MobileDetailsContainer from "./MobileDetailsContainer";
 import TransactionStore from "../Store/TranactionStore";
 import Loader from "./CommonComponents/Loader";
 import useFetchInitialData from "../useFetchIntialData";
+import formatData from "../utils/formatData";
 import {
   allTransactionMobileStyle,
   allTransactionTableStyle,
@@ -18,7 +19,7 @@ const Debit=observer(()=> {
   const{data,isPending}=useFetchInitialData()
   useEffect(()=>{
     if(data){
-      TransactionStore.setTransactionData(data.transactions)
+      TransactionStore.transactionData = formatData(data.transactions)
     }
   },[data])
   

@@ -6,7 +6,7 @@ import { MdDelete } from "react-icons/md";
 
 import { DATA_FORMAT,TYPE_OF_TRANSACTION_CREDIT  } from "../Constants";
 import { mobileListsStyle } from "../utils/Styles";
-import mainStore from "../Store/MainStore";
+import mainStore from "../Store/ModalStore";
 import { TransactionData } from "../Types/CommonTypes";
 
 const MobileDetailsList=observer(({ eachItems }:{eachItems:TransactionData})=>{
@@ -43,7 +43,7 @@ const MobileDetailsList=observer(({ eachItems }:{eachItems:TransactionData})=>{
       </p>
       <div className="flex flex-col justify-between">
         <div className="flex justify-between">
-          <p>{eachItems.transaction_name}</p>
+          <p>{eachItems.name}</p>
           <p>{eachItems.type}</p>
         </div>
         <div className="flex justify-between">

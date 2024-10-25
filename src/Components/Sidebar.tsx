@@ -9,7 +9,7 @@ import { observer } from "mobx-react";
 
 import { INITIAL_ROUTE, TRANSACTION_ROUTE, LOCAL_ADMIN } from "../Constants";
 import { fetchUserProfile } from "../http";
-import mainStore from "../Store/MainStore";
+import mainStore from "../Store/ModalStore";
 
 const Sidebar= observer(()=> {
   const location = useLocation();

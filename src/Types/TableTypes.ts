@@ -1,5 +1,5 @@
 export interface TransactionTableData {id: number, 
-    transaction_name: string, 
+    name: string, 
     type: string, 
     category: string, 
     amount: number, 
