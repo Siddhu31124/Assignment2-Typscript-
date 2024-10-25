@@ -5,10 +5,14 @@ import TransactionStore from "../Store/TranactionStore";
 import { CREDIT_INDEX,DEBIT_INDEX } from "../Constants";
 
 class __EditTransactionModal{
-    
+
+    //rename as TrasactionModel
+    //add transation attributes here
     constructor(){
         makeAutoObservable(this,{},{autoBind:true})
     }
+
+    
     editTransaction(editTransactionDetails: TransactionData) {
         let previousAmount=0
         const updatedData = TransactionStore.transactionData.map((eachTransaction) => {
