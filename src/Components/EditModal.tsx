@@ -12,21 +12,20 @@ import Loader from "./CommonComponents/Loader";
 import Dropdown from "./CommonComponents/Dropdown";
 import { loaderStyle } from "../utils/Styles";
 import mainStore from "../Store/MainStore";
-import {AddTransactionDataType } from "../Types/CommonTypes";
+import { AddTransactionData } from "../Types/CommonTypes";
 import TransactionStore from "../Store/TranactionStore";
+import { TransactionData } from "../Types/CommonTypes";
 import {
   TRANSACTION_CATEGORY,
   TRANSACTION_TYPE,
   DATA_FORMAT,
 } from "../Constants";
 
-
-const  EditModal=observer(()=> {
+const EditModal = observer(() => {
   const isOpen = mainStore.modalStates.isEdit;
   const closeModalFunction = mainStore.handelCloseModal;
-  const editTransactionData = mainStore.selectedData;
+  const editTransactionData: TransactionData = mainStore.selectedData;
   const typeOfModal = "isEdit";
-
 
   interface InputStateType {
     id: number;
@@ -35,44 +34,52 @@ const  EditModal=observer(()=> {
     category: string;
     amount: number;
     date: string;
-} 
-  const [inputValues, setInputValues] = useState<InputStateType>(editTransactionData);
+  }
+
+  const [inputValues, setInputValues] =
+    useState<InputStateType>(editTransactionData);
 
   useEffect(() => {
     setInputValues(editTransactionData);
   }, [editTransactionData]);
 
   const mutateFun = handelEditTransaction;
-  const { data,mutate, isPending } = useMutation({
+  const { data, mutate, isPending } = useMutation({
     mutationFn: mutateFun,
     onSuccess: () => {
       closeModalFunction(typeOfModal);
       toast.success(`Updated Successfully`);
     },
   });
-  
-  useEffect(()=>{
-    if(data){
-      TransactionStore.editTransaction(data.update_transactions_by_pk)
-    }
-  },[data])
 
-  function handelChange(event:React.ChangeEvent<HTMLInputElement> , typeInput:string) {
+  useEffect(() => {
+    if (data) {
+      TransactionStore.editTransaction(data.update_transactions_by_pk);
+    }
+  }, [data]);
+
+  function handelChange(
+    event: React.ChangeEvent<HTMLInputElement>,
+    typeInput: string
+  ) {
     setInputValues((prevVal) => {
       return { ...prevVal, [typeInput]: event.target.value };
     });
   }
 
-  function handelEditData(event :React.FormEvent<HTMLInputElement>, id:number) {
+  function handelEditData(
+    event: React.FormEvent<HTMLInputElement>,
+    id: number
+  ) {
     event.preventDefault();
     let data = new FormData(event.target as HTMLFormElement);
-    let formData: AddTransactionDataType  = {
+    let formData: AddTransactionData = {
       name: data.get("name") as string,
       type: data.get("type") as string,
       category: data.get("category") as string,
       amount: Number(data.get("amount")),
       date: data.get("date") as string,
-    };;
+    };
     mutate({ data: formData, id: id });
   }
 
@@ -123,23 +130,29 @@ const  EditModal=observer(()=> {
           name="name"
           placeholder="Transaction Name"
           value={inputValues ? inputValues.transaction_name : ""}
-          onChange={(event :React.ChangeEvent<HTMLInputElement>) => handelChange(event, "transaction_name")}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handelChange(event, "transaction_name")
+          }
         />
 
         <Dropdown
           inputId="type"
           itemsName={TRANSACTION_TYPE}
-          types
+          type="type"
           value={inputValues ? inputValues.type : ""}
-          onChange={(event :React.ChangeEvent<HTMLSelectElement>) => handelChange(event, "type")}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handelChange(event, "type")
+          }
         />
 
         <Dropdown
           inputId="category"
           itemsName={TRANSACTION_CATEGORY}
-          types
+          type="category"
           value={inputValues ? inputValues.category : ""}
-          onChange={(event :React.ChangeEvent<HTMLSelectElement>) => handelChange(event, "category")}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handelChange(event, "category")
+          }
         />
 
         <Input
@@ -149,7 +162,9 @@ const  EditModal=observer(()=> {
           name="amount"
           placeholder="Amount"
           value={inputValues ? inputValues.amount : ""}
-          onChange={(event :React.ChangeEvent<HTMLInputElement>) => handelChange(event, "amount")}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handelChange(event, "amount")
+          }
         />
 
         <Input
@@ -159,7 +174,9 @@ const  EditModal=observer(()=> {
           name="date"
           placeholder="Date"
           value={inputValues ? dayjs(inputValues.date).format(DATA_FORMAT) : ""}
-          onChange={(event :React.ChangeEvent<HTMLInputElement>) => handelChange(event, "date")}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handelChange(event, "date")
+          }
         />
 
         <button className="bg-blue-600 p-2 text-white font-bold rounded-lg">
@@ -168,5 +185,5 @@ const  EditModal=observer(()=> {
       </form>
     </Modal>
   );
-})
-export default EditModal
+});
+export default EditModal;

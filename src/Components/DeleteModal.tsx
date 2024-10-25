@@ -12,7 +12,7 @@ import mainStore from "../Store/MainStore";
 import TransactionStore from "../Store/TranactionStore";
 
 const DeleteModal = observer(() => {
-  const { data,mutate, isPending } = useMutation({
+  const { data, mutate, isPending } = useMutation({
     mutationKey: ["deleteFn"],
     mutationFn: handleTransactionDelete,
     onSuccess: () => {
@@ -20,12 +20,11 @@ const DeleteModal = observer(() => {
       toast.success("Deleted Successfully");
     },
   });
-  useEffect(()=>{
-    if(data){
-    TransactionStore.deleteTransaction(data.delete_transactions_by_pk)
-  }
-  },[data])
-  
+  useEffect(() => {
+    if (data) {
+      TransactionStore.deleteTransaction(data.delete_transactions_by_pk.id);
+    }
+  }, [data]);
 
   const isOpen = mainStore.modalStates.isDelete;
   const closeModalFunction = mainStore.handelCloseModal;

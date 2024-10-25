@@ -13,7 +13,7 @@ import
   UPDATE_TRANSACTION_API,
   LOGIN_API,LOCAL_ADMIN,PROFILE_API,
 } from "./Constants.js";
-import {LoginTypes,AddTransactionDataType } from "./Types/CommonTypes.js";
+import {LoginData,AddTransactionData } from "./Types/CommonTypes.js";
 
 export const queryClient = new QueryClient();
 export const queryCache=new QueryCache()
@@ -83,7 +83,7 @@ export const handleTransactionDelete = async ({id}:{id:string}) => {
   return res.data
 };
 
-export async function handelAddTransaction({data}:{data:AddTransactionDataType}){
+export async function handelAddTransaction({data}:{data:AddTransactionData}){
   const localToken = localStorage.getItem(LOCAL_TOKEN);
   const token_id: number = localToken ? JSON.parse(localToken) : undefined; 
   const url =ADD_TRANSACTION_API
@@ -101,7 +101,7 @@ export async function handelAddTransaction({data}:{data:AddTransactionDataType})
   return res.data
 }
 
-export async function handelEditTransaction({data,id}:{data:AddTransactionDataType,id:number}){
+export async function handelEditTransaction({data,id}:{data:AddTransactionData,id:number}){
   const localToken = localStorage.getItem(LOCAL_TOKEN);
   const token_id: number = localToken ? JSON.parse(localToken) : undefined; 
   const url = UPDATE_TRANSACTION_API;
@@ -116,10 +116,9 @@ export async function handelEditTransaction({data,id}:{data:AddTransactionDataTy
   return (res.data)  
 }
 
-export async function handelLogin({data,admin}:{data:LoginTypes,admin:boolean}){
+export async function handelLogin({data,admin}:{data:LoginData,admin:boolean}){
   const url =
     LOGIN_API;
-
   const res = await axios.post(url,data,
     {
       headers: {

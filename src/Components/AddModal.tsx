@@ -11,24 +11,24 @@ import Input from "./CommonComponents/Input";
 import Dropdown from "./CommonComponents/Dropdown";
 import { TRANSACTION_CATEGORY, TRANSACTION_TYPE } from "../Constants";
 import { loaderStyle } from "../utils/Styles";
-import { AddTransactionDataType } from "../Types/CommonTypes";
+import { AddTransactionData } from "../Types/CommonTypes";
 import mainStore from "../Store/MainStore";
 import TransactionStore from "../Store/TranactionStore";
 
 const AddModal = observer(() => {
   let mutateFun = handelAddTransaction;
-  const { data,mutate, isPending } = useMutation({
+  const { data, mutate, isPending } = useMutation({
     mutationFn: mutateFun,
     onSuccess: () => {
       closeModalFunction(typeOfModal);
       toast.success("Added Successfully");
     },
   });
-  useEffect(()=>{
-    if(data){
-      TransactionStore.addTransaction(data.insert_transactions_one)
+  useEffect(() => {
+    if (data) {
+      TransactionStore.addTransaction(data.insert_transactions_one);
     }
-  },[data])
+  }, [data]);
 
   const isOpen = mainStore.modalStates.isAdd;
   const closeModalFunction = mainStore.handelCloseModal;
@@ -37,7 +37,7 @@ const AddModal = observer(() => {
   function handelAddData(event: React.FormEvent) {
     event.preventDefault();
     let data = new FormData(event.target as HTMLFormElement);
-    let formData: AddTransactionDataType = {
+    let formData: AddTransactionData = {
       name: data.get("name") as string,
       type: data.get("type") as string,
       category: data.get("category") as string,
@@ -89,8 +89,12 @@ const AddModal = observer(() => {
           name="name"
           placeholder="Transaction Name"
         />
-        <Dropdown inputId="type" itemsName={TRANSACTION_TYPE} types />
-        <Dropdown inputId="category" itemsName={TRANSACTION_CATEGORY} />
+        <Dropdown inputId="type" itemsName={TRANSACTION_TYPE} types="type" />
+        <Dropdown
+          inputId="category"
+          itemsName={TRANSACTION_CATEGORY}
+          type="category"
+        />
         <Input
           label_name="Amount"
           type="text"

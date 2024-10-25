@@ -1,9 +1,9 @@
 import { makeAutoObservable } from "mobx";
-import { ContextDataType } from "../Types/ContextTypes";
+import { ModalTypeData } from "../Types/ContextTypes";
 
 class MainStates{
     isDarkMode=false
-    selectedData:ContextDataType=undefined
+    selectedData:ModalTypeData=undefined
     isOpenMenu=false
     modalStates={
         isDelete: false,
@@ -14,7 +14,7 @@ class MainStates{
     constructor(){
         makeAutoObservable(this)
     }
-    handelOpenModal=(typeOfModal:string, data? : ContextDataType)=> {
+    handelOpenModal=(typeOfModal:string, data? : ModalTypeData)=> {
         if (data) {
           this.selectedData=data;
         }

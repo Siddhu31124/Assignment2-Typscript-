@@ -7,17 +7,16 @@ import { MdDelete } from "react-icons/md";
 import { DATA_FORMAT,TYPE_OF_TRANSACTION_CREDIT  } from "../Constants";
 import { mobileListsStyle } from "../utils/Styles";
 import mainStore from "../Store/MainStore";
-import { ActionTypeData } from "../Types/ContextTypes";
+import { TransactionData } from "../Types/CommonTypes";
 
-const MobileDetailsList=observer(({ eachItems }:{eachItems:ActionTypeData})=>{
+const MobileDetailsList=observer(({ eachItems }:{eachItems:TransactionData})=>{
   
   const [isOpenAction, setIsOpenAction] = useState<boolean>(false);
-
   function handelAction() {
     setIsOpenAction((preVal) => !preVal);
   }
 
-  const actionContainer = (eachItems:ActionTypeData) => {
+  const actionContainer = (eachItems:TransactionData) => {
     return (
       <div className="bg-white px-2  rounded-2xl self-start dark:bg-black">
         <button

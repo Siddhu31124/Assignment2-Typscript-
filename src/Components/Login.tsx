@@ -8,7 +8,6 @@ import { observer } from "mobx-react";
 import { handelLogin } from "../http";
 import Input from "./CommonComponents/Input";
 import Loader from "./CommonComponents/Loader";
-import TransactionStore from "../Store/TranactionStore";
 import {
   INITIAL_ROUTE,
   LOCAL_TOKEN,
@@ -24,30 +23,31 @@ const Login = observer(() => {
   const { mutate, isPending, isError } = useMutation({
     mutationFn: handelLogin,
     onSuccess: () => {
-      console.log(TransactionStore.transactionData)
       navigate(INITIAL_ROUTE);
     },
   });
 
   let isAdmin = location.pathname === ADMIN_LOGIN_ROUTE;
-  let isUserIdPresent=localStorage.getItem(LOCAL_TOKEN)
-  let user_Id : boolean = isUserIdPresent ? JSON.parse(isUserIdPresent):undefined;
+  let isUserIdPresent = localStorage.getItem(LOCAL_TOKEN);
+  let user_Id: boolean = isUserIdPresent
+    ? JSON.parse(isUserIdPresent)
+    : undefined;
 
-  function loginFunction(event:React.FormEvent<EventTarget>) {
+  function loginFunction(event: React.FormEvent<EventTarget>) {
     event.preventDefault();
     let data = new FormData(event.target as HTMLFormElement);
-    let loginData : {email:string,password:string} = 
-    {email : data.get("email") as string,password:data.get("password") as string};
-    mutate({ data : loginData, admin: isAdmin });
+    let loginData: { email: string; password: string } = {
+      email: data.get("email") as string,
+      password: data.get("password") as string,
+    };
+    mutate({ data: loginData, admin: isAdmin });
   }
-
 
   let errorContent = () => {
     if (isError) {
       return <p className="text-red-600 mb-2">{LOGIN_ERROR}</p>;
     }
   };
-
 
   const loginForm = () => {
     switch (true) {
@@ -116,6 +116,6 @@ const Login = observer(() => {
       {loginForm()}
     </div>
   );
-})
+});
 
-export default Login
+export default Login;

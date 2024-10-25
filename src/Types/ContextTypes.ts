@@ -1,8 +1,8 @@
-export type ActionTypeData = 
+export type ModalTypeData = 
 {id: number, transaction_name: string,type: string, category: string, amount: number,date:string} 
   | number |undefined 
 
-export interface ContextStateType{
+export interface ModalStates{
     isDelete: boolean,
     isAdd: boolean,
     isEdit: boolean,
@@ -10,10 +10,10 @@ export interface ContextStateType{
 }
 
 export interface ContextType {
-    ModalStates:ContextStateType,
-    selectedData : ContextDataType,
-    handelOpenModal:(typeOfModal:string, data? : ContextDataType  )=>void,
-    handelCloseModal:(typeOfModal:string, data? : ContextDataType)=>void,
+    ModalStates:ModalStates,
+    selectedData : ModalTypeData,
+    handelOpenModal:(typeOfModal:string, data? : ModalTypeData  )=>void,
+    handelCloseModal:(typeOfModal:string, data? : ModalTypeData)=>void,
     isDarkMode:boolean,
     handelDarkMode:()=>void,
     isOpenMenu:boolean,
