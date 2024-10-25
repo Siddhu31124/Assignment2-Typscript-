@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { TransactionData } from "../Types/CommonTypes";
 import { CREDIT_INDEX,DEBIT_INDEX } from "../Constants";
+
 //Rename with underscore
 class _TransactionStore {
   //Remove the below unused state
@@ -10,6 +11,10 @@ class _TransactionStore {
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
   }
+  setTotalTransaction(data:{type:string,sum:number}[]){
+    this.totalTransaction=data
+  }
+
   get getTransactionsData() {
     return this.transactionData;
   }
@@ -21,6 +26,7 @@ class _TransactionStore {
   //Do not use arrow functions in the stores
   addTransaction(addTransactionDetails: TransactionData) {
     this.transactionData.push(addTransactionDetails);
+
     if(addTransactionDetails.type==='credit'){
       this.totalTransaction[CREDIT_INDEX].sum+=addTransactionDetails.amount
     }
@@ -34,11 +40,12 @@ class _TransactionStore {
     const updatedData = this.transactionData.map((eachTransaction) => {
       if (eachTransaction.id === editTransactionDetails.id) {
         previousAmount=eachTransaction.amount
-        return editTransactionDetails;
+        return editTransactionDetails
       }
       return eachTransaction;
     });
     this.transactionData = updatedData;
+
     const editDetails = this.transactionData.filter((eachTransaction) => (eachTransaction.id === editTransactionDetails.id) )
     if(editDetails[0].type==='credit'){
       this.totalTransaction[CREDIT_INDEX].sum+=editDetails[0].amount-previousAmount
@@ -50,12 +57,13 @@ class _TransactionStore {
 
   //deleteId arg and the types for it does't match
   deleteTransaction(deleteId: number) {
-    this.transactionData = this.transactionData.filter(
-      (eachTransaction) => eachTransaction.id !== deleteId
-    );
     const deleteDetails = this.transactionData.filter(
       (eachTransaction) => eachTransaction.id === deleteId
     );
+    this.transactionData = this.transactionData.filter(
+      (eachTransaction) => eachTransaction.id !== deleteId
+    );
+    
     if(deleteDetails[0].type==='credit'){
       this.totalTransaction[CREDIT_INDEX].sum-=deleteDetails[0].amount
     }

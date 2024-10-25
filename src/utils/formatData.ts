@@ -20,3 +20,17 @@ export default function formatData(data:Data[]){
     }))
     return updatedData
 }
+
+export function formateObjData(data:Data){
+
+    return {
+        name:data.transaction_name,
+        id:data.id,
+        type:data.type,
+        category:data.category,
+        amount:data.amount,
+        date:data.date,
+        userId:data.user_id
+    }
+
+}

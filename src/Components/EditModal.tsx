@@ -20,6 +20,7 @@ import {
   TRANSACTION_TYPE,
   DATA_FORMAT,
 } from "../Constants";
+import { formateObjData } from "../utils/formatData";
 
 const EditModal = observer(() => {
   const isOpen = mainStore.modalStates.isEdit;
@@ -54,7 +55,7 @@ const EditModal = observer(() => {
 
   useEffect(() => {
     if (data) {
-      TransactionStore.editTransaction(data.update_transactions_by_pk,);
+      TransactionStore.editTransaction(formateObjData(data.update_transactions_by_pk));
     }
   }, [data]);
 

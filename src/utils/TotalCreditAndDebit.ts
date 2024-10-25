@@ -5,16 +5,15 @@ const totalCreditAndDebit = (totals_credit_debit_transactions : TotalCreditAndDe
     if(totals_credit_debit_transactions.length>1){
         let creditData=totals_credit_debit_transactions[1].sum 
         let debitData=totals_credit_debit_transactions[0].sum
-        return { credit:creditData,
-                  debit:debitData}
+        return { debit:debitData,credit:creditData}
     }
     else if (totals_credit_debit_transactions.length===0){
-        return {credit:0,debit:0}
+        return {debit:0,credit:0}
     }
     else if(totals_credit_debit_transactions[0].type==='credit'){
         let creditData=totals_credit_debit_transactions[0].sum 
-        return {credit:creditData,debit:0}
+        return {debit:0,credit:creditData}
     }
-    return {credit:0,debitData}
+    return {debitData,credit:0}
 }
 export default totalCreditAndDebit

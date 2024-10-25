@@ -18,14 +18,13 @@ const TotalCreditDebitContainer=observer(()=> {
     queryFn: fetchTotalTransaction,
   });
 
-  useEffect(()=>{
-    if(data){
-      console.log(data.totals_credit_debit_transactions)
-      TransactionStore.totalTransaction=data.totals_credit_debit_transactions
+    useEffect(()=>{
+      if(data){
+        TransactionStore.setTotalTransaction(data.totals_credit_debit_transactions)
     }
+    },[data])
 
-  },[data])
-  
+    
 
 
   const msgContent = () => {
@@ -43,9 +42,9 @@ const TotalCreditDebitContainer=observer(()=> {
   };
 
   const totalDataFunction = () => {
-    if (data) {
-      let totalData = totalCreditAndDebit(
-      TransactionStore.gettotalTransactionData)
+    if (TransactionStore.gettotalTransactionData.length>0) {
+      let totalData = totalCreditAndDebit(TransactionStore.gettotalTransactionData
+      )
       return (
         <div className=" flex flex-col gap-2 lg:flex-row lg:justify-between mb-5 ">
           <div className={`text-green-400 ${totalTransactionBlocks}`}>
