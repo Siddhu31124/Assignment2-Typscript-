@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { observer } from "mobx-react";
 
-
 import Loader from "./CommonComponents/Loader";
 import ModalLayout from "./CommonComponents/ModalLayout";
 import TransactionTable from "./CommonComponents/TransactionTable";
@@ -17,23 +16,25 @@ import {
   transactionTableMain,
 } from "../utils/Styles";
 
+const Transaction = observer(() => {
+  const { data, isPending } = useFetchInitialData();
 
-const  Transaction = observer(()=> {
-  const{data,isPending}=useFetchInitialData()
-
-  useEffect(()=>{
-    if(data){
-      TransactionStore.transactionData = formatData(data.transactions)
+  useEffect(() => {
+    if (data) {
+      TransactionStore.setTransactionData(formatData(data.transactions));
     }
-  },[data])
-  
+  }, [data]);
+
   const allTransactionData = () => {
     switch (true) {
       case data !== undefined: {
         return (
           <>
             <main className={allTransactionTableStyle}>
-              <TransactionTable data={{transactions:TransactionStore.getTransactionsData}} head />
+              <TransactionTable
+                data={{ transactions: TransactionStore.TransactionsData }}
+                head
+              />
             </main>
             <main
               className={allTransactionMobileStyle}
@@ -60,6 +61,6 @@ const  Transaction = observer(()=> {
       {allTransactionData()}
     </div>
   );
-})
+});
 
-export default Transaction
+export default Transaction;

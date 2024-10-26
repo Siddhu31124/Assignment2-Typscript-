@@ -20,7 +20,6 @@ import {
   DATA_FORMAT,
 } from "../Constants";
 import { formateObjData } from "../utils/formatData";
-import EditTransactionModal from "../Modal/TransactionModal";
 
 const EditModal = observer(() => {
   const isOpen = mainStore.modalStates.isEdit;
@@ -55,7 +54,9 @@ const EditModal = observer(() => {
 
   useEffect(() => {
     if (data) {
-      EditTransactionModal.editTransaction(formateObjData(data.update_transactions_by_pk));
+      TransactionStore.editTransaction(
+        formateObjData(data.update_transactions_by_pk)
+      );
     }
   }, [data]);
 
@@ -130,7 +131,7 @@ const EditModal = observer(() => {
           id="transactionName"
           name="name"
           placeholder="Transaction Name"
-          value={inputValues ? inputValues.name: ""}
+          value={inputValues ? inputValues.name : ""}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
             handelChange(event, "name")
           }
@@ -138,7 +139,7 @@ const EditModal = observer(() => {
 
         <Dropdown
           optionName={TRANSACTION_TYPE}
-          name='type'
+          name="type"
           value={inputValues ? inputValues.type : ""}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
             handelChange(event, "type")

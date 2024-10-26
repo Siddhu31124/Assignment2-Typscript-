@@ -2,45 +2,52 @@ import { MdOutlineLightMode } from "react-icons/md";
 import { useEffect } from "react";
 import { observer } from "mobx-react";
 
-
 import Loader from "./CommonComponents/Loader";
 import TotalCreditDebitContainer from "./TotalCreditDebitContainer";
 import ModalLayout from "./CommonComponents/ModalLayout";
 import TransactionTable from "./CommonComponents/TransactionTable";
-import MobileNavBar from './MobileMenuElement';
+import MobileNavBar from "./MobileMenuElement";
 import MobileDetailsContainer from "./MobileDetailsContainer";
 import { allTransactionDashTableStyle, navBarStyle } from "../utils/Styles";
 import mainStore from "../Store/ModalStore";
 import TransactionStore from "../Store/TranactionStore";
-import {loaderStyle } from "../utils/Styles";
+import { loaderStyle } from "../utils/Styles";
 import useFetchInitialData from "../useFetchIntialData";
 import formatData from "../utils/formatData";
 
-const DashBoard = observer(() => { 
-  const {data,isPending}=useFetchInitialData()
-  useEffect(()=>{
-    if(data){
-      TransactionStore.transactionData = formatData(data.transactions)
+const DashBoard = observer(() => {
+  const { data, isPending } = useFetchInitialData();
+  useEffect(() => {
+    if (data) {
+      TransactionStore.setTransactionData(formatData(data.transactions));
     }
-  },[data])
-  
+  }, [data]);
+
   const lastTransaction = () => {
     switch (true) {
       case data !== undefined: {
         return (
           <>
             <TransactionTable
-              data={{transactions:TransactionStore.getTransactionsData.slice(0,3)}}
+              data={{
+                transactions: TransactionStore.TransactionsData.slice(0, 3),
+              }}
               tableClass={allTransactionDashTableStyle}
             />
-            <MobileDetailsContainer data={{transactions:TransactionStore.getTransactionsData.slice(0,3)}}/>
+            <MobileDetailsContainer
+              data={{
+                transactions: TransactionStore.TransactionsData.slice(0, 3),
+              }}
+            />
           </>
         );
       }
-      case isPending :{
-        return <div className={loaderStyle}>
-            <Loader/>
-        </div>
+      case isPending: {
+        return (
+          <div className={loaderStyle}>
+            <Loader />
+          </div>
+        );
       }
     }
   };

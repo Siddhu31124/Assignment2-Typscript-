@@ -15,18 +15,18 @@ import {
   transactionTableMain,
 } from "../utils/Styles";
 
-const Credit= observer(()=> {
-  const{data,isPending}=useFetchInitialData()
-  useEffect(()=>{
-    if(data){
-      TransactionStore.transactionData = formatData(data.transactions)
+const Credit = observer(() => {
+  const { data, isPending } = useFetchInitialData();
+  useEffect(() => {
+    if (data) {
+      TransactionStore.setTransactionData(formatData(data.transactions));
     }
-  },[data])
-  
+  }, [data]);
+
   const creditData = () => {
     switch (true) {
-      case data!==undefined: {
-        let creditTransactionArray = TransactionStore.getTransactionsData.filter(
+      case data !== undefined: {
+        let creditTransactionArray = TransactionStore.TransactionsData.filter(
           (each) => each.type === "credit"
         );
         return (
@@ -45,10 +45,12 @@ const Credit= observer(()=> {
           </>
         );
       }
-      case isPending :{
-        return <div className={loaderStyle}>
-            <Loader/>
-        </div>
+      case isPending: {
+        return (
+          <div className={loaderStyle}>
+            <Loader />
+          </div>
+        );
       }
     }
   };
@@ -59,6 +61,6 @@ const Credit= observer(()=> {
       {creditData()}
     </div>
   );
-})
+});
 
-export default Credit
+export default Credit;

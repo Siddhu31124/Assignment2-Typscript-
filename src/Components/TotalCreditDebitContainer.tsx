@@ -5,27 +5,31 @@ import { useEffect } from "react";
 import { fetchTotalTransaction } from "../http";
 import { QUERY_KEY, FAIL_ERROR } from "../Constants";
 import totalCreditAndDebit from "../utils/TotalCreditAndDebit";
-import { totalTransactionBlocks } from "../utils/Styles"
+import { totalTransactionBlocks } from "../utils/Styles";
 import { TotalCreditAndDebit } from "../Types/CommonTypes";
 import TransactionStore from "../Store/TranactionStore";
 
-const TotalCreditDebitContainer=observer(()=> {
-  const { data, isPending, isError }:
-  {data:{totals_credit_debit_transactions:TotalCreditAndDebit} | undefined,
-  isPending:boolean,
-  isError:boolean}= useQuery({
+const TotalCreditDebitContainer = observer(() => {
+  const {
+    data,
+    isPending,
+    isError,
+  }: {
+    data: { totals_credit_debit_transactions: TotalCreditAndDebit } | undefined;
+    isPending: boolean;
+    isError: boolean;
+  } = useQuery({
     queryKey: [QUERY_KEY],
     queryFn: fetchTotalTransaction,
   });
 
-    useEffect(()=>{
-      if(data){
-        TransactionStore.setTotalTransaction(data.totals_credit_debit_transactions)
+  useEffect(() => {
+    if (data) {
+      TransactionStore.setTotalTransaction(
+        data.totals_credit_debit_transactions
+      );
     }
-    },[data])
-
-    
-
+  }, [data]);
 
   const msgContent = () => {
     switch (true) {
@@ -42,9 +46,10 @@ const TotalCreditDebitContainer=observer(()=> {
   };
 
   const totalDataFunction = () => {
-    if (TransactionStore.gettotalTransactionData.length>0) {
-      let totalData = totalCreditAndDebit(TransactionStore.gettotalTransactionData
-      )
+    if (TransactionStore.TotalTransactionData.length > 0) {
+      let totalData = totalCreditAndDebit(
+        TransactionStore.TotalTransactionData
+      );
       return (
         <div className=" flex flex-col gap-2 lg:flex-row lg:justify-between mb-5 ">
           <div className={`text-green-400 ${totalTransactionBlocks}`}>
@@ -71,5 +76,5 @@ const TotalCreditDebitContainer=observer(()=> {
   };
 
   return <>{totalDataFunction()}</>;
-})
-export default TotalCreditDebitContainer
+});
+export default TotalCreditDebitContainer;

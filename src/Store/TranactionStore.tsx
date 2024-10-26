@@ -1,66 +1,99 @@
 import { makeAutoObservable } from "mobx";
 import { TransactionData } from "../Types/CommonTypes";
-import { CREDIT_INDEX,DEBIT_INDEX } from "../Constants";
+import { CREDIT_INDEX, DEBIT_INDEX } from "../Constants";
+import TransactionModal from "../Modal/TransactionModal";
+import { TYPE_OF_TRANSACTION_CREDIT } from "../Constants";
 
-//Rename with underscore
+interface total {
+  type: string;
+  sum: number;
+}
+
 class _TransactionStore {
-  //Remove the below unused state
-  //use private access modifiers here
   transactionData: TransactionData[] = [];
-  //Use the type interface here
-  totalTransaction:{type:string,sum:number}[]=[]
+  totalTransaction: total[] = [];
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  setTotalTransaction(data:{type:string,sum:number}[]){
-    this.totalTransaction=data
+  setTotalTransaction(data: total[]) {
+    this.totalTransaction = data;
   }
 
-  //NO need to add get prefix here
-  get getTransactionsData() {
+  get TransactionsData() {
     return this.transactionData;
   }
-  get gettotalTransactionData(){
-    return this.totalTransaction
+  get TotalTransactionData() {
+    return this.totalTransaction;
+  }
+  setTransactionData(data: TransactionData[]) {
+    this.transactionData = data;
   }
 
-  //Do not add two variants of methods for same use case
-  //Do not use arrow functions in the stores
   addTransaction(addTransactionDetails: TransactionData) {
     this.transactionData.push(addTransactionDetails);
+    this.addTransactionTotalData(addTransactionDetails);
+  }
 
-    //no magic numbers
-    if(addTransactionDetails.type==='credit'){
-      this.totalTransaction[CREDIT_INDEX].sum+=addTransactionDetails.amount
-    }
-    else{
-      this.totalTransaction[DEBIT_INDEX].sum+=addTransactionDetails.amount
+  addTransactionTotalData(addDetails: TransactionData) {
+    if (addDetails.type === TYPE_OF_TRANSACTION_CREDIT) {
+      this.totalTransaction[CREDIT_INDEX].sum += addDetails.amount;
+    } else {
+      this.totalTransaction[DEBIT_INDEX].sum += addDetails.amount;
     }
   }
-  //deleteId arg and the types for it does't match
+
   deleteTransaction(deleteId: number) {
-    const deleteDetails = this.transactionData.filter(
+    const deleteDetails = this.transactionData.find(
       (eachTransaction) => eachTransaction.id === deleteId
     );
     this.transactionData = this.transactionData.filter(
       (eachTransaction) => eachTransaction.id !== deleteId
     );
+    if (deleteDetails) {
+      this.deleteTransactionTotal(deleteDetails);
+    }
+  }
 
-    //Use find method here
-    if(deleteDetails[0].type==='credit'){
-      this.totalTransaction[CREDIT_INDEX].sum-=deleteDetails[0].amount
+  deleteTransactionTotal(deleteDetails: TransactionData) {
+    if (deleteDetails) {
+      if (deleteDetails.type === TYPE_OF_TRANSACTION_CREDIT) {
+        this.totalTransaction[CREDIT_INDEX].sum -= deleteDetails.amount;
+      } else {
+        this.totalTransaction[DEBIT_INDEX].sum -= deleteDetails.amount;
+      }
     }
-    else{
-      this.totalTransaction[DEBIT_INDEX].sum-=deleteDetails[0].amount
-    }
-    //Remove consoles
+  }
+
+  editTransaction(editTransactionDetails: TransactionData) {
+    const { id, name, type, category, amount, date, userId } =
+      editTransactionDetails;
+    const transactionModal = new TransactionModal(
+      id,
+      name,
+      type,
+      category,
+      amount,
+      date,
+      userId
+    );
+    transactionModal.editTransaction();
   }
 }
 
-  //We shouldn't calculate the total in frontend
-  //No magic numbers
-
 const TransactionStore = new _TransactionStore();
 export default TransactionStore;
+
+//Rename with underscore
+//Remove the below unused state
+//use private access modifiers here
+//Use the type interface here
+//NO need to add get prefix here
+//Do not add two variants of methods for same use case
+//Do not use arrow functions in the stores
+//deleteId arg and the types for it does't match
+//Use find method here
+// Delegate to TransactionModel's editTransaction method
+//We shouldn't calculate the total in frontend
+//No magic numbers
