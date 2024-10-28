@@ -1,46 +1,55 @@
 import { makeAutoObservable } from "mobx";
-import { TransactionData } from "../Types/CommonTypes";
-import { CREDIT_INDEX, DEBIT_INDEX } from "../Constants";
-import TransactionModal from "../Modal/TransactionModal";
 import { TYPE_OF_TRANSACTION_CREDIT } from "../Constants";
+import TransactionModel from "../Modal/Transactionmodel";
+import { TransactionData } from "../Types/CommonTypes";
 
-interface total {
-  type: string;
-  sum: number;
+export interface Total {
+  creditAmount: number;
+  debitAmount: number;
 }
 
 class _TransactionStore {
-  transactionData: TransactionData[] = [];
-  totalTransaction: total[] = [];
+  transactionData: TransactionModel[];
+  totalCreditAmount: number | null;
+  totalDebitAmount: number | null;
 
   constructor() {
+    this.transactionData = [];
+    this.totalDebitAmount = null;
+    this.totalCreditAmount = null;
     makeAutoObservable(this, {}, { autoBind: true });
-  }
-
-  setTotalTransaction(data: total[]) {
-    this.totalTransaction = data;
   }
 
   get TransactionsData() {
     return this.transactionData;
   }
-  get TotalTransactionData() {
-    return this.totalTransaction;
+
+  setTotalTransaction(data: Total) {
+    this.totalCreditAmount = data.creditAmount;
+    this.totalDebitAmount = data.debitAmount;
   }
+
   setTransactionData(data: TransactionData[]) {
-    this.transactionData = data;
+    this.transactionData = data.map(
+      (eachTransaction) => new TransactionModel(eachTransaction)
+    );
   }
 
   addTransaction(addTransactionDetails: TransactionData) {
-    this.transactionData.push(addTransactionDetails);
-    this.addTransactionTotalData(addTransactionDetails);
+    const data = new TransactionModel(addTransactionDetails);
+    this.transactionData.push(data);
+    this.addTransactionTotalData(data);
   }
 
-  addTransactionTotalData(addDetails: TransactionData) {
-    if (addDetails.type === TYPE_OF_TRANSACTION_CREDIT) {
-      this.totalTransaction[CREDIT_INDEX].sum += addDetails.amount;
+  addTransactionTotalData(addDetails: TransactionModel) {
+    const isTypeCreditAndDefined: boolean =
+      addDetails.type === TYPE_OF_TRANSACTION_CREDIT &&
+      this.totalCreditAmount !== null;
+
+    if (isTypeCreditAndDefined) {
+      this.totalCreditAmount = this.totalCreditAmount ?? 0 + addDetails.amount;
     } else {
-      this.totalTransaction[DEBIT_INDEX].sum += addDetails.amount;
+      this.totalDebitAmount! = this.totalDebitAmount ?? 0 + addDetails.amount;
     }
   }
 
@@ -57,28 +66,42 @@ class _TransactionStore {
   }
 
   deleteTransactionTotal(deleteDetails: TransactionData) {
-    if (deleteDetails) {
-      if (deleteDetails.type === TYPE_OF_TRANSACTION_CREDIT) {
-        this.totalTransaction[CREDIT_INDEX].sum -= deleteDetails.amount;
-      } else {
-        this.totalTransaction[DEBIT_INDEX].sum -= deleteDetails.amount;
-      }
+    const isTypeCreditAndDefined: boolean =
+      deleteDetails.type === TYPE_OF_TRANSACTION_CREDIT &&
+      this.totalCreditAmount !== null;
+    if (isTypeCreditAndDefined) {
+      this.totalCreditAmount =
+        this.totalCreditAmount ?? 0 - deleteDetails.amount;
+    } else if (this.totalDebitAmount) {
+      this.totalDebitAmount! =
+        this.totalDebitAmount ?? 0 - deleteDetails.amount;
     }
   }
 
   editTransaction(editTransactionDetails: TransactionData) {
-    const { id, name, type, category, amount, date, userId } =
-      editTransactionDetails;
-    const transactionModal = new TransactionModal(
-      id,
-      name,
-      type,
-      category,
-      amount,
-      date,
-      userId
-    );
-    transactionModal.editTransaction();
+    const editData = editTransactionDetails;
+    let previousValue = 0;
+    const editDetails = this.TransactionsData.find((eachTransaction) => {
+      previousValue = eachTransaction.amount;
+      return eachTransaction.id === editData.id;
+    });
+    if (editDetails) {
+      editDetails.editTransactionMethod(editData);
+      this.totalDetails(editDetails, previousValue);
+    }
+  }
+
+  totalDetails(editDetails: TransactionModel, previousAmount: number) {
+    const isTypeCreditAndDefined: boolean =
+      editDetails.type === TYPE_OF_TRANSACTION_CREDIT &&
+      this.totalCreditAmount !== null;
+    if (isTypeCreditAndDefined) {
+      this.totalCreditAmount =
+        this.totalCreditAmount ?? 0 + editDetails.amount - previousAmount;
+    } else if (this.totalDebitAmount) {
+      this.totalDebitAmount =
+        this.totalDebitAmount ?? 0 + editDetails.amount - previousAmount;
+    }
   }
 }
 

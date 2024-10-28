@@ -4,7 +4,6 @@ import { useEffect } from "react";
 
 import { fetchTotalTransaction } from "../http";
 import { QUERY_KEY, FAIL_ERROR } from "../Constants";
-import totalCreditAndDebit from "../utils/TotalCreditAndDebit";
 import { totalTransactionBlocks } from "../utils/Styles";
 import { TotalCreditAndDebit } from "../Types/CommonTypes";
 import TransactionStore from "../Store/TranactionStore";
@@ -25,9 +24,18 @@ const TotalCreditDebitContainer = observer(() => {
 
   useEffect(() => {
     if (data) {
-      TransactionStore.setTotalTransaction(
-        data.totals_credit_debit_transactions
-      );
+      const debit: number =
+        data.totals_credit_debit_transactions.find(
+          (item) => item.type === "debit"
+        )?.sum || 0;
+      const credit: number =
+        data.totals_credit_debit_transactions.find(
+          (item) => item.type === "credit"
+        )?.sum || 0;
+      TransactionStore.setTotalTransaction({
+        creditAmount: credit,
+        debitAmount: debit,
+      });
     }
   }, [data]);
 
@@ -46,33 +54,28 @@ const TotalCreditDebitContainer = observer(() => {
   };
 
   const totalDataFunction = () => {
-    if (TransactionStore.TotalTransactionData.length > 0) {
-      let totalData = totalCreditAndDebit(
-        TransactionStore.TotalTransactionData
-      );
-      return (
-        <div className=" flex flex-col gap-2 lg:flex-row lg:justify-between mb-5 ">
-          <div className={`text-green-400 ${totalTransactionBlocks}`}>
-            <div className="flex flex-col gap-1">
-              {totalData.credit}
-              {msgContent()}
-              <p className="text-base">Credit</p>
-            </div>
-            <div>
-              <img src="Credit.png" className="w-[100px]" />
-            </div>
+    return (
+      <div className=" flex flex-col gap-2 lg:flex-row lg:justify-between mb-5 ">
+        <div className={`text-green-400 ${totalTransactionBlocks}`}>
+          <div className="flex flex-col gap-1">
+            {TransactionStore.totalCreditAmount}
+            {msgContent()}
+            <p className="text-base">Credit</p>
           </div>
-          <div className={`text-red-600 ${totalTransactionBlocks}`}>
-            <div className="flex flex-col gap-1">
-              {totalData.debit}
-              {msgContent()}
-              <p className="text-base">Debit</p>
-            </div>
-            <img src="Debit.png" className="w-[100px]" />
+          <div>
+            <img src="Credit.png" className="w-[100px]" />
           </div>
         </div>
-      );
-    }
+        <div className={`text-red-600 ${totalTransactionBlocks}`}>
+          <div className="flex flex-col gap-1">
+            {TransactionStore.totalDebitAmount}
+            {msgContent()}
+            <p className="text-base">Debit</p>
+          </div>
+          <img src="Debit.png" className="w-[100px]" />
+        </div>
+      </div>
+    );
   };
 
   return <>{totalDataFunction()}</>;

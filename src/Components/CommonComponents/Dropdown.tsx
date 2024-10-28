@@ -1,10 +1,10 @@
-import { DropdownPropsTypes } from "../../Types/CommonTypes";
+import { DropdownProps } from "../../Types/CommonTypes";
 
 export default function Dropdown({
   optionName,
   name,
   ...props
-}: DropdownPropsTypes) {
+}: DropdownProps) {
   return (
     <div className=" flex flex-col gap-1 font-normal">
       <label htmlFor={name}>

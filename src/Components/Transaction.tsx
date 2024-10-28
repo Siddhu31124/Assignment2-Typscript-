@@ -21,6 +21,8 @@ const Transaction = observer(() => {
 
   useEffect(() => {
     if (data) {
+      console.log(data.transactions);
+      console.log(formatData(data.transactions));
       TransactionStore.setTransactionData(formatData(data.transactions));
     }
   }, [data]);

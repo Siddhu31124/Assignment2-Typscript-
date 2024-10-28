@@ -11,9 +11,9 @@ import Input from "./CommonComponents/Input";
 import Dropdown from "./CommonComponents/Dropdown";
 import { TRANSACTION_CATEGORY, TRANSACTION_TYPE } from "../Constants";
 import { loaderStyle } from "../utils/Styles";
-import { AddTransactionData } from "../Types/CommonTypes";
 import mainStore from "../Store/ModalStore";
 import TransactionStore from "../Store/TranactionStore";
+import { formateObjData } from "../utils/formatData";
 
 const AddModal = observer(() => {
   let mutateFun = handelAddTransaction;
@@ -26,7 +26,9 @@ const AddModal = observer(() => {
   });
   useEffect(() => {
     if (data) {
-      TransactionStore.addTransaction(data.insert_transactions_one);
+      TransactionStore.addTransaction(
+        formateObjData(data.insert_transactions_one)
+      );
     }
   }, [data]);
 
@@ -37,7 +39,7 @@ const AddModal = observer(() => {
   function handelAddData(event: React.FormEvent) {
     event.preventDefault();
     let data = new FormData(event.target as HTMLFormElement);
-    let formData: AddTransactionData = {
+    let formData = {
       name: data.get("name") as string,
       type: data.get("type") as string,
       category: data.get("category") as string,
@@ -90,10 +92,7 @@ const AddModal = observer(() => {
           placeholder="Transaction Name"
         />
         <Dropdown optionName={TRANSACTION_TYPE} name="type" />
-        <Dropdown
-          optionName={TRANSACTION_CATEGORY}
-          name="category"
-        />
+        <Dropdown optionName={TRANSACTION_CATEGORY} name="category" />
         <Input
           labelName="Amount"
           type="text"
